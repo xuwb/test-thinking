@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数组去重</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script type="text/javascript">
+        var arr1 = [2, 3, 4, 5, 6, 3, 6, 2, 8, 9, 0, -0, +0, NaN, NaN, NaN, "NaN", "NaN"];
+
+        // es6 方法
+        function union_es6(arr) {
+            let newArr = [];
+            for(let value of arr) {
+                if(!newArr.includes(value)) {
+                    newArr.push(value);
+                }
+            }
+            return newArr;
+        }
+        console.log(union_es6(arr1));
+
+        // es5 方法
+        function union_es5_1(arr) {
+            var newArr = [], countNaN = 0;
+            arr.forEach(function(value) {
+                if(newArr.indexOf(value) == -1) {
+                    if(value !== value) {                 // 不能使用 isNaN()。 因为 isNaN("NaN") == true
+                        if(!countNaN++)
+                            newArr.push(value);
+                    }
+                    else {
+                        newArr.push(value);
+                    }
+                }
+            });
+            return newArr;
+        }
+        console.log(union_es5_1(arr1));
+
+        function union_es5_2(arr) {
+            var countNaN = 0;
+            return arr.filter(function(value, index, array) {
+                if(value !== value && !countNaN) {      // NaN !== NaN 且 只在第一个NaN执行
+                    return ++countNaN;
+                }
+                return array.indexOf(value) === index;  // indexOf(NaN) == -1
+            })
+        }
+        console.log(union_es5_2(arr1));
+
+
+        // 兼容方法
+        function union_normal_1(arr) {
+            var newArr = [], countNaN = 0;
+            for(var i = 0, len = arr.length; i < len; i++) {
+                var item = arr[i];
+                if(newArr.indexOf(item) == -1) {
+                    if(item !== item) {                 // 不能使用 isNaN()。 因为 isNaN("NaN") == true
+                        if(!countNaN++)
+                            newArr.push(item);
+                    }
+                    else {
+                        newArr.push(item);
+                    }
+                }
+            };
+            return newArr;
+        }
+        if (typeof Array.prototype.indexOf != "function") {
+            Array.prototype.indexOf = function (searchElement, fromIndex) {
+                var index = -1;
+                fromIndex = fromIndex * 1 || 0;
+
+                for (var k = 0, length = this.length; k < length; k++) {
+                    if (k >= fromIndex && this[k] === searchElement) {
+                        index = k;
+                        break;
+                    }
+                }
+                return index;
+            };
+        }
+        if (typeof Array.prototype.filter != "function") {
+            Array.prototype.filter = function (fn, context) {
+                var arr = [];
+                if (typeof fn === "function") {
+                    for (var k = 0, length = this.length; k < length; k++) {
+                        fn.call(context, this[k], k, this) && arr.push(this[k]);
+                    }
+                }
+                return arr;
+            };
+        }
+        console.log(union_normal_1(arr1));
+
+    </script>
+</body>
+</html>
