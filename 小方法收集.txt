@@ -1,0 +1,2 @@
+Array.prototype.slice.call(arguments)   // 将 arguments（）转成数组
+Object.prototype.toString.call("aa")    // 返回 [object String] 获取参数的类型
