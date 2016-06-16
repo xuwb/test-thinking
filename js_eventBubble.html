@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  div {height: 30px; width: 150px; background-color: #cfc; }
+  </style>
+</head>
+<body>
+  <div id="btn">
+    <button>click</button>
+  </div>
+<script>
+	// http://www.cnblogs.com/whyoop/archive/2012/06/08/2542233.html
+	var btnBox = document.getElementById('btn');
+	var btn = document.getElementsByTagName('button')[0];
+	// 子元素添加事件
+	btn.onclick = function(e){
+	    // 阻止冒泡，btnBox的click不会触发
+		// 如果提供了事件对象，则这是一个非IE浏览器
+		if (e && e.stopPropagation ) { 
+			e.stopPropagation();
+		}else{
+			// 否则，我们需要使用IE的方式来取消事件冒泡 
+			window.event.cancelBubble = true;
+		}
+		console.log('click_btn');
+	}
+	btnBox.onclick = function(e){
+		console.log('click_box');
+	}
+	
+	// 父元素添加事件
+	// 鼠标移到btnBox内的任意元素，均会触发onmouseover。
+	// 通过判断触发onmouseover前的相邻元素是否在 btnBox 内，来阻止触发事件
+	btnBox.onmouseover = function(e){
+	if (e) {
+		if (btnBox.contains(e.relatedTarget)) {
+		    return
+		}
+	} else if (event) {
+		if (btnBox.contains(event.fromElement)) {
+		    return
+		}
+	};
+	console.log('over');
+	}
+	// 等价于
+	$('#btn').mouseenter(function(e){
+	  console.log('over_$')
+	})
+	</script>
+ 
+</body>
+</html>
