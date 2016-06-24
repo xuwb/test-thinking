@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>获取url参数</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script type="text/javascript">
+        function getUrlParam1(url){
+            var reg = /[\?&]([^&]+?)=([^&]*?)(?=[&|$])/g;
+            var match, paramArr = [];
+            while(match = reg.exec(url)) {
+                console.log(match);
+                paramArr.push({key: match[1], value: match[2]});
+            }
+            return paramArr;
+        }
+        function getUrlParam2(url){
+            var paramArr = {}, item, param;
+            var arg = url.split('?')[1];
+            if(arg) {
+                var items = arg.split('&');
+                while(item = items.shift()) {
+                    param = item.split('=');
+                    if(param.length == 2) {
+                        paramArr[param[0]] = param[1];
+                    }
+                }
+            }
+            return paramArr;
+        }
+        var params = getUrlParam1('http://baidu.com?type=12&show=true&from=aaa-123');
+        console.log(params);
+    </script>
+</body>
+</html>
