@@ -3,14 +3,21 @@
 <head>
     <title>获取url参数</title>
     <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
 </head>
 <body>
+    <button>111</button>
     <script type="text/javascript">
+        $('button').each(function(i,val){
+            $(this).on('click', function(){
+                console.log(i, val)
+            })
+        })
         function getUrlParam1(url){
             var reg = /[\?&]([^&]+?)=([^&]*?)(?=[&|$])/g;
             var match, paramArr = [];
             while(match = reg.exec(url)) {
-                console.log(match);
+                // console.log(match);
                 paramArr.push({key: match[1], value: match[2]});
             }
             return paramArr;
@@ -30,7 +37,9 @@
             return paramArr;
         }
         var params = getUrlParam1('http://baidu.com?type=12&show=true&from=aaa-123');
-        console.log(params);
+        // console.log(params);
+		
+		console.log(Date.parse(new Date('2016-03-06')))
     </script>
 </body>
 </html>

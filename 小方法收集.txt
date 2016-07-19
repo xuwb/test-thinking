@@ -1,2 +1,20 @@
 Array.prototype.slice.call(arguments)   // 将 arguments（）转成数组
 Object.prototype.toString.call("aa")    // 返回 [object String] 获取参数的类型
+
+运算符优先级
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+
+var config = arguments.length <= 1 || arguments[1] === undefined ? O : arguments[1];
+相当于
+var config = (arguments.length <= 1 || arguments[1]) === undefined ? O : arguments[1];
+
+
++str  ===  Number(str)
+-str  ===  -Number(str)
+?:  ~str/~~str
++undefined  ==  NaN
+~~undefined ==  0
+
+var d = new Date();
+Date.parse(d)  获取毫秒
+JSON.parse()   将含有unicode的文字转为中文
