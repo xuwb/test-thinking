@@ -36,10 +36,21 @@
             }
             return paramArr;
         }
+		function getUrlParam3(){
+			var paramStr = location.search.substr(1);
+			
+            var reg = /[\?&]([^&]+?)=([^&]*?)(?=[&|$])/g;
+            var match, paramArr = [];
+            while(match = reg.exec(paramStr)) {
+                // console.log(match);
+                paramArr.push({key: match[1], value: match[2]});
+            }
+            return paramArr;
+        }
         var params = getUrlParam1('http://baidu.com?type=12&show=true&from=aaa-123');
-        // console.log(params);
+        console.log(params);
 		
-		console.log(Date.parse(new Date('2016-03-06')))
+		//console.log(Date.parse(new Date('2016-03-06')))
     </script>
 </body>
 </html>

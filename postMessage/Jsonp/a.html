@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSONP 实现原理</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jsonp.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        JSONP.getJson('b.html', {callback: 'remoteFunc', from: 'from1'}, function(data){
+            console.log(data);
+        })
+    </script>
+</body>
+</html>
