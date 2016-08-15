@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>获取iframe内容高度</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
+</head>
+<body>
+    <iframe id="rulesFrame" src='/' frameborder="no" width="100%"></iframe>
+    <script type="text/javascript">
+		getIframeHeight('rulesFrame');
+		// 不支持跨域
+        function getIframeHeight(iframeId){
+			return new Promise(function(resolve, reject){
+				try{
+					var iframe = document.getElementById(iframeId),
+						iframeHeight = 200;
+						// iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+					
+					if(iframe.attachEvent){
+						iframe.attachEvent("onload", function(){
+							resolve(iframe.contentWindow.document.documentElement.scrollHeight);
+						});
+					}else{
+						iframe.onload = function(){
+							resolve(iframe.contentDocument.body.scrollHeight);
+						};           
+					}
+				}catch(e){
+					reject(e)
+				}
+			})
+		}
+    </script>
+</body>
+</html>
