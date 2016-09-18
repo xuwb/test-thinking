@@ -14,7 +14,7 @@
             })
         })
         function getUrlParam1(url){
-            var reg = /[\?&]([^&]+?)=([^&]*?)(?=[&|$])/g;
+            var reg = /[\?&]([^&]+?)=([^&]*?)(?=&|$)/g;
             var match, paramArr = [];
             while(match = reg.exec(url)) {
                 // console.log(match);
