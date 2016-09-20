@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>键盘输入事件，只能输入两位小数</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
+</head>
+<body>
+    <input type="text" name="num_twodot" />
+    <script type="text/javascript">
+        // 只能输入两位小数的数字
+        // 在return false的情况下，keypress支持回退键，keydown不支持
+        var numReg = /^\d*\.\d{0,2}$/,
+            noNumReg = /[^\d\.]/ig;
+        $('[name="num_twodot"]').on('keypress', function(e){
+            var numVal = $(this).val();
+            if((e.which < 48 || e.which > 56) && e.which != 46) {
+                return false;
+            }
+            if(numVal.indexOf('.') != -1 && e.which == 46) {
+                return false;
+            }
+        });
+        // 用于过滤中文输入法
+        $('[name="num_twodot"]').on('keyup', function(e){
+            var inputStr = $(this).val();
+            // 如果包含非数字或小数点，过滤非数字
+            if(noNumReg.test(inputStr)){
+                $(this).val(inputStr.replace(noNumReg, ''));
+            }
+            // 如果包含小数点，则过滤小数点后第三位
+            var dotPos = inputStr.indexOf('.');
+            if(dotPos != -1) {
+                if(!numReg.test(inputStr)) {
+                    $(this).val($(this).val().substring(0, dotPos + 3));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
