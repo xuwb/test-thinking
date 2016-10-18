@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>面向切面(方面)编程01——闭包的使用</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script type="text/javascript">
+        // 主要用于不修改原对象，通过外部修改原对象的属性，实现添加日志等附属功能
+        // 闭包使用场景：
+        // 1、用于包装可执行函数，并返回函数的执行。作为其他函数的函数类参数
+        // 2、用于包装可执行函数，并返回新函数。
+        // 3、利用作用域，通过闭包外的参数，来控制闭包里的程序流程与返回值
+
+        function aspect(target, methodName, advice){
+            var exist = target[methodName];
+            var previous = function(){
+                return exist.apply(this, [].slice.call(arguments));
+            };
+            var adviced = advice(previous);
+            target[methodName] = function(){
+                return adviced ? adviced.apply(target, arguments) : previous.apply(target, arguments);
+            }
+            return {
+                remove: function(){
+                    adviced = null;
+                    adivce = null;
+                }
+            }
+        }
+        // 使用===================================
+        var count = 1;
+        function wrap(originalFn){
+            var current = count++;
+            return function(){
+                console.log('before' + current);
+                originalFn.apply(this, arguments);
+                console.log('after' + current);
+            }
+        }
+        var obj = {
+            foo: function(key){
+                console.log(this.name, key);
+            },
+            name: 'obj'
+        }
+        var h1 = aspect(obj, 'foo', wrap);
+        var h2 = aspect(obj, 'foo', wrap);
+        obj.foo(11);
+        h1.remove();
+        obj.foo(22);
+
+    </script>
+</body>
+</html>

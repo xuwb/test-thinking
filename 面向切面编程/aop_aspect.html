@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>面向切面(方面)编程02——添加before/after方法</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script type="text/javascript">
+
+        function aspect(target, methodName, advice){
+            var exist = target[methodName], dispatcher;
+            
+        }
+        aspect.before = function(){
+            
+        }
+        aspect.after = function(){
+            
+        }
+
+        // 测试代码===================================
+        // before的返回值做为原函数的入参，依次顺延至after
+        var obj = {
+            name: 'obj',
+            set: function(key, value){
+                this[key] = value;
+            },
+            get: function(key){
+                return this[key];
+            }
+        }
+        aspect.before(obj, 'set', function(key, val){
+
+        })
+    </script>
+</body>
+</html>

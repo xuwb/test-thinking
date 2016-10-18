@@ -10,6 +10,7 @@
     <script type="text/javascript">
         // 只能输入两位小数的数字
         // 在return false的情况下，keypress支持回退键，keydown不支持
+		// 两者都是在键盘按下时触发，不同点：keydown只要键盘有按下就会触发，keypress需要键盘按下后能输出东西才会触发
         var numReg = /^\d*\.\d{0,2}$/,
             noNumReg = /[^\d\.]/ig;
         $('[name="num_twodot"]').on('keypress', function(e){
