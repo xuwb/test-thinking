@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>window.open</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="../jquery-1.11.2.js"></script>
+</head>
+<body>
+    <button>打开子窗口</button>
+    <script type="text/javascript">
+    window.func = function(o){
+        console.log(o);
+    }
+    $('button').on('click', function(){
+        window.open('child.html', '_blank')
+    })
+    </script>
+</body>
+</html>

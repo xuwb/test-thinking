@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>promise功能实现</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        // 执行
+        function fn(val){
+            var promise = new MyPromise(function(resolve, reject){
+                setTimeout(function(){
+                    resolve(val);
+                }, 1000);
+            });
+            return promise;
+        }
+        
+        fn('back1').then(function(val1){
+            console.log(val1);
+            return fn('back2');
+        }).then(function(val2)){
+            console.log(val2);
+        });
+
+        // 定义
+        function MyPromise(){
+            var args = Array.prototype.slice(arguments);
+            if(Object.prototype.toString.call(args[0]) == '[object Function]'){
+                var fun = args[0];
+
+            }
+        }
+        MyPromise.prototype = {
+            then: function(success, error){
+
+            },
+            catch: function(error){
+
+            }
+        }
+        MyPromise.all = function(){
+
+        }
+        MyPromise.race = function(){
+            
+        }
+    </script>
+</body>
+</html>

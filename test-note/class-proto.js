@@ -143,3 +143,4 @@ var s = new sub
 //       getName:function()
 //       getType:function()
 //       __proto__:Object
+

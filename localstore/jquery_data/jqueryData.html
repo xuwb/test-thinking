@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jquery data 分析</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="../../jquery-1.11.2.js"></script>
+</head>
+<body>
+    <div id="box1" data-c="555"></div>
+    <div id="box2"></div>
+
+    <script type="text/javascript">
+        var e = $('div'),
+            w = $('div');
+        e.data('a', 11);
+        w.data('a', 22);
+        console.log(e.data('a'), w.data('a'))
+        console.log(e == w);
+
+        $.data(e, 'b', 33);
+        $.data(w, 'b', 44);
+        console.log($.data(e, 'b'), $.data(w, 'b'));
+
+        console.log($.data(e, 'c'))
+        console.log(e.data('c'))
+        e.data('c', 666)
+        console.log(e.data('c'))
+    </script>
+</body>
+</html>

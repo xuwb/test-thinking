@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>父页面</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.2.js"></script>
+</head>
+<body>
+    <div style="width:200px; float:left; margin-right:200px;border:solid 1px #333;">
+        <div id="color">Frame Color</div>
+    </div>
+    <iframe id='postFrame' src="http://127.0.0.1:3001/domain_b/b.html" width="400" height="300"></iframe>
+    <script type="text/javascript">
+		// 原生
+		// $(function(){}) 没有加载iframe中的页面的情况下执行，故还没有执行侦听函数
+        // window.onload = function() {
+        //     //document.getElementById('postFrame').contentWindow.postMessage('getcolor', 'http://30.10.1.184:3002');
+        //     window.frames[0].postMessage('getcolor', 'http://127.0.0.1:3002');
+        // }
+        // window.addEventListener('message', function(e){
+        //     var color=e.data;
+        //     document.getElementById('color').style.backgroundColor=color;
+        // },false);
+		
+		// jquery
+		window.onload = function() {
+            // window.frames[0].postMessage(JSON.stringify({type: 'height', content: document.body.scrollHeight}), 'http://127.0.0.1:3001');
+            window.frames[0].postMessage(JSON.stringify({type: 'height', content: document.body.scrollHeight}), 'http://127.0.0.1:3001');
+        }
+        $(window).on('message', function(e){
+            e = e.originalEvent;
+
+            if(e.source != window.frames[0]) return;
+            var color = e.data;
+            console.log(typeof(color))
+            if(color == '[object Object]') console.log(color);
+            $('#color').css('backgroundColor', color);
+        });
+
+
+        // jquery jsonp
+        // $.ajax({
+        //     url: 'http://127.0.0.1:3001/data_b.html',
+        //     async:false, 
+        //     data: {
+        //             name:"Donald Duck",
+        //             city:[1,2,3]
+        //           },
+        //     type: 'get',
+        //     dataType: 'jsonp',
+        //     //jsonp: 'jsonpCallback',    
+        //     jsonpCallback: 'remoteFunc',
+        //     success: function(data) {
+        //         console.log(data);
+        //     }
+        // })
+    </script>
+</body>
+</html>

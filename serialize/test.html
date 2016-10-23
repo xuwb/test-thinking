@@ -7,9 +7,73 @@
     <script type="text/javascript" src="serialize.js"></script>
 </head>
 <body>
-    <input type="text" name="total" value="123">
-    <div data-serialize-name="a">
-        <input type="text" name="tel" value="456">
-    </div>
+    <table border="0" style="margin: auto;">
+        <tbody>
+            <tr>
+                <td width="60">外置1</td>
+                <td width="160"><input type="text" name="outer1" value="outer11"></td>
+            </tr>
+            <tr>
+                <td width="60">外置2</td>
+                <td width="300"><input type="text" name="outer2" value="outer22"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table border="0" style="margin: auto;" data-serialize-name="a">
+        <tbody>
+            <tr>
+                <td width="60">参数1</td>
+                <td width="300"><input type="text" name="tel" value="456"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table border="0" style="margin: auto;" data-serialize-name="b">
+                        <tbody>
+                            <tr>
+                                <td width="60">嵌套1</td>
+                                <td width="300"><input type="text" name="inner1" value="inner11"></td>
+                            </tr>
+                            <tr>
+                                <td>嵌套2</td>
+                                <td>
+                                    <input id="check1" type="checkbox" name="check1" value="c1">
+                                    <label for="check1">check1</label>
+                                    <input id="check2" type="checkbox" name="check1" value="c2">
+                                    <label for="check2">check2</label>
+                                    <input id="check3" type="checkbox" name="check3" value="c3">
+                                    <label for="check3">check3</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </td>
+            </tr>
+            <tr>
+                <td>参数3</td>
+                <td>
+                    <input id="radio1" type="radio" name="radio1" value="r1" checked>
+                    <label for="radio1">radio1</label>
+                    <input id="radio2" type="radio" name="radio1" value="r2">
+                    <label for="radio2">radio2</label>
+                    <input id="radio3" type="radio" name="radio1" value="r3">
+                    <label for="radio3">radio3</label>
+                </td>
+            </tr>
+            <tr>
+                <td>参数4</td>
+                <td><input type="text" name="e.email" value="mail"></td>
+            </tr>
+            <tr>
+                <td>参数5</td>
+                <td><input type="text" name="age" value="29"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td><button>确定</button></td>
+            </tr>
+        </tfoot>
+    </table>
 </body>
 </html>
