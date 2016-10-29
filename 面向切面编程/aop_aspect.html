@@ -6,17 +6,58 @@
 </head>
 <body>
     <script type="text/javascript">
+        // around：直接执行advice(exist)
+        // before：执行before中的advice
+        // exist： 以before的返回值作为入参，执行exist
+        // after： 以exist的返回值作为入参，执行after中的advice
+        (function(window){
+            function aspect(type){
+                return function(target, methodName, advice){
+                    var exist = target[methodName], dispatcher;
+                    if(!exist || exist.target != target){
+                        dispatcher = target[methodName] = function(){
+                            var beforeArr = dispatcher.before,
+                                afterArr = dispatcher.after,
+                                args = [].slice.call(arguments), rs;
 
-        function aspect(target, methodName, advice){
-            var exist = target[methodName], dispatcher;
-            
-        }
-        aspect.before = function(){
-            
-        }
-        aspect.after = function(){
-            
-        }
+                            for(var l = beforeArr.length; l--;){
+                                args = beforeArr[l].advice.apply(target, args) || args;
+                            }
+                            dispatcher.method && (rs = dispatcher.method.apply(target, args));
+                            for(var i = 0, len = afterArr.length; i < len; i++){
+                                rs = afterArr[i].advice.call(target, args, rs) || rs;
+                            }
+                        }
+                        dispatcher.before = [];
+                        dispatcher.after = [];
+                        if(exist){
+                            dispatcher.method = exist;
+                            exist.target = target;
+                        }
+                    }
+                    var aspectArr = (dispatcher || exist)[type];
+                    var obj = {
+                        advice: advice,
+                        _index: aspectArr.length,
+                        remove: function(){
+                            aspectArr.splice(this._index, 1);
+                        }
+                    }
+                    aspectArr.push(obj);
+                    return obj;
+                }
+            }
+            var aop = {
+                before: aspect('before'),
+                after: aspect('after')
+            }
+            if(typeof module === 'undefined'){
+                window.aspect = aop;
+            } else {
+                module.exports = aop;
+            }
+        })(window);
+
 
         // 测试代码===================================
         // before的返回值做为原函数的入参，依次顺延至after
@@ -26,12 +67,29 @@
                 this[key] = value;
             },
             get: function(key){
-                return this[key];
+                console.log(this[key]);
             }
         }
-        aspect.before(obj, 'set', function(key, val){
 
+        var h0 = aspect.before(obj, 'print', function(){
+            console.log(111)
         })
+
+        var h1 = aspect.before(obj, 'set', function(key, value){
+            console.log(key,value)
+            return [key, value+'_before1'];
+        })
+
+        var h2 = aspect.before(obj, 'set', function(key, value){
+            return [key, value+'_before2'];
+        })
+
+        obj.print();
+        obj.set('name', 'setObj');
+        obj.get('name');
+        h1.remove();
+        obj.set('name', 'setObj2');
+        obj.get('name');
     </script>
 </body>
 </html>

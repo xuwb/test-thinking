@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>call.apply的用法</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <script type="text/javascript">
+        function main(a, b){
+            // this 为 {a: 'a1'}
+            console.log(this, a, b)
+        }
+        // 执行main，this指向{a: 'a1'}
+        // Function.call.apply(fn, [context, args]);
+        Function.call.apply(main, [{a: 'a1'}, 11, 22]);
+        Function.apply.call(main, {a: 'a1'}, [11, 22]);
+        Function.call.call(main, {a: 'a1'}, 11, 22);
+
+        // 使用场景：
+        // 一、forEach
+        // limit.forEach(arr, function(val, i, arr){})
+        // Function.call.apply(Array.prototype.forEach, arguments)
+        // ==>
+        // Function.call.apply(Array.prototype.forEach, [arr, function(val, i, arr){}])
+        // ===
+        // arr.forEach(function(val, i, arr){})
+        // 二、bind
+        // Function.call.apply(fn, [context, args])
+        // ===
+        // Function.call.apply(Function.prototype.bind, [fn, context, args])();
+    </script>
+</body>
+</html>
