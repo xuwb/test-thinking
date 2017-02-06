@@ -43,7 +43,7 @@ var JSONP = {
         } else {
             // callback=?未包含回调函数名
             callbackName = 'jsonp_' + this.now() + '_' + this.getRandomStr();
-            url.replace(/callback=(\?|%3F)/, 'callback=' + callbackName);
+            url.replace(/callback=(\?|%3F)/, 'callback=' + callbackName); // ?编码过则为 %3F
         }
 
         // 创建远程调用的回调函数

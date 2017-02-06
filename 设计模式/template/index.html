@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>模板测试</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="template.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+    <script id="demo_script" type="text/template">
+        <ul>
+            {{
+                for(var i = 0, len = tagCloud.length; i < len; i++){
+                    var item = tagCloud[i];
+            }}
+                    <li>{{=item['title']}}</li>
+            {{
+                }
+            }}
+        </ul>
+    </script>
+    <script type="text/javascript">
+        var data = {
+            tagCloud: [
+                {title: 'design'},
+                {title: 'HTML'},
+                {title: 'css'}
+            ]
+        };
+        var html = document.getElementById('demo_script').innerHTML;
+        var template = compile(html);
+        document.getElementById('content').innerHTML = template(data);
+
+        // template_array.push('<ul>');    
+        // for(var i = 0, len = tagCloud.length; i < len; i++){
+        //     var item = tagCloud[i];
+        //     template_array.push('<li>',typeof(item['title'])==='undefined'?'':item['title'],'</li>');    
+        // }
+        // template_array.push('</ul>');
+    </script>
+</body>
+</html>

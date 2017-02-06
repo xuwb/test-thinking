@@ -30,8 +30,8 @@
             ctx.strokeStyle = this.strokeStyle;    
             ctx.stroke();  // 这里用stroke画一个空心圆，想填充颜色的童鞋可以用fill方法
 
-            ctx.fillStyle = '#666';
-            ctx.fill();
+            // ctx.fillStyle = '#666';
+            // ctx.fill();
             ctx.closePath();
         };
         function Ring(startAngle, percent) {    
@@ -40,6 +40,7 @@
             this.percent = percent;  //弧占的比例
         }
         Ring.prototype = Object.create(Circle.prototype);
+        // 扇形
         Ring.prototype.drawRing = function(ctx) { 
             var count = 0, 
                 that = this, 
@@ -51,9 +52,10 @@
             requestAnimationFrame(handle);
             function handle() { 
                 var anglePerSec = 2 * Math.PI * (that.percent / 100) / times; // 每个间隔滑动的弧度 
+                ctx.clearRect(0,0,1100,500);
                 ctx.beginPath(); 
                 ctx.moveTo(250, 250);
-                ctx.arc(250, 250, that.radius, startAngle, endAngle, false); //这里的圆心坐标要和cirle的保持一致 
+                ctx.arc(250, 250, that.radius, -Math.PI/2, endAngle, false); //这里的圆心坐标要和cirle的保持一致 
                 ctx.closePath();  // 先closePath再stroke，否则线条会有断裂
                 ctx.lineCap = that.lineCap; 
                 ctx.strokeStyle = that.fillStyle; 
@@ -61,14 +63,43 @@
                 ctx.lineWidth = that.lineWidth;   
                 // ctx.stroke(); 
                 ctx.fill();
-                startAngle += anglePerSec - 0.0028; // 消除每次绘环间的计算误差，防止出现空隙 
+                startAngle += anglePerSec; // 消除每次绘环间的计算误差，防止出现空隙 
                 endAngle = startAngle + anglePerSec; 
                 count++; 
-                if (count < times) { 
+                if (count < times) { console.log(endAngle)
                     requestAnimationFrame(handle);
                 } // angle 
             }
         }
+        // Ring.prototype.drawRing = function(ctx) { 
+        //     var count = 0, 
+        //         that = this, 
+        //         times = 10, // 分十次绘制蓝弧 
+        //         startAngle = this.startAngle, 
+        //         endAngle = startAngle; // draw background cirle this.draw(ctx); 
+        //     this.draw(ctx);
+
+        //     requestAnimationFrame(handle);
+        //     function handle() { 
+        //         var anglePerSec = 2 * Math.PI * (that.percent / 100) / times; // 每个间隔滑动的弧度 
+        //         ctx.beginPath(); 
+        //         // ctx.moveTo(250, 250);
+        //         ctx.arc(250, 250, that.radius, startAngle, endAngle, false); //这里的圆心坐标要和cirle的保持一致 
+        //         ctx.closePath();  // 先closePath再stroke，否则线条会有断裂
+        //         ctx.lineCap = that.lineCap; 
+        //         ctx.strokeStyle = that.fillStyle; 
+        //         ctx.fillStyle = '#666';
+        //         ctx.lineWidth = that.lineWidth;   
+        //         ctx.stroke(); 
+        //         // ctx.fill();
+        //         startAngle += anglePerSec - 0.0028; // 消除每次绘环间的计算误差，防止出现空隙 
+        //         endAngle = startAngle + anglePerSec; 
+        //         count++; 
+        //         if (count < times) { 
+        //             requestAnimationFrame(handle);
+        //         } // angle 
+        //     }
+        // }
 
         // Ring.prototype.drawRing = function(ctx) {
         //     this.draw(ctx);  // 调用Circle的draw方法画圈圈     
@@ -85,7 +116,7 @@
         //     ctx.stroke(); 
         //     ctx.fill();     
         // }
-        var ring = new Ring(0, 30);  // 从2*Math.PI/3弧度开始，进度为50%的环
+        var ring = new Ring(-Math.PI/2, 30);  // 从2*Math.PI/3弧度开始，进度为50%的环
         ring.drawRing(ctx);
 
 

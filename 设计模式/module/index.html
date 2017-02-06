@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>异步模块化</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="Module.js"></script>
+</head>
+<body>
+    <button id="demo">测试</button>
+    <script type="text/javascript">
+        F.module(['lib/event', 'lib/dom'], function(dom, events) {
+            events.on('demo', 'click', function(){
+                dom.html('demo', 'success');
+            })
+        })
+    </script>
+</body>
+</html>
