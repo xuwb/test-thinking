@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>  
+    <head>  
+        <title>当前任务</title>  
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <script type="text/javascript" src="jquery.min.js"></script> 
+    </head>  
+    <body>   
+        <table id="tbl" border="1" bordercolor="blue" cellpadding="4" cellspacing="0" style="margin:auto;font-size:14px;">  
+            <tr>  
+                <th>taskid</th>  
+                <th>实例id</th>  
+                <th>url</th>  
+                <th>操作</th>  
+            </tr> 
+        </table>
+        <div class="JS-img"></div>  
+        <div >  
+      	
+      	<div id="img-container" style="position:relative;">
+        	<img id="imgView"/> 
+        </div>
+        <!-- 给执行的节点加框 -->  
+        
+        <script type="text/javascript">
+            $(function(){
+                $.ajax({
+                    url: '/portal/activiti/list.json',
+                    type: 'get',
+                    success: function(ret){
+                    	var data = ret.content.data;
+                    	var trs = [];
+                    	var tmp = '<tr>'+
+					                '<td>{{pinstId}}</td>'+
+					                '<td>{{taskId}}</td>'+ 
+					                '<td>{{url}}</td>'+ 
+					                '<td><a class="JS-view" data-href="{{url}}" data-pos=\'{{imageCoordinateList}}\'>点击查看图片</a></td>'+
+					              '</tr>';
+                        data.forEach(function(val){
+                        	trs.push(tmpToString(tmp, val));
+                        })
+                        $('#tbl').append(trs.join(''));
+                        var img = document.getElementById('imgView');
+                        $('.JS-view').on('click', function(){
+                        	var target = $(this);
+                        	img.src = target.data('href');
+                        	
+                        	var rect = target.data('pos');
+                        	var rectDiv = '<div style="position:absolute;border:solid red 2px; width:{{width}}px; height:{{height}}px; left:{{x}}px;top:{{y}}px;"></div>'
+                        	var rects = [];
+                        	rect.forEach(function(pos){
+                        		rects.push(tmpToString(rectDiv, pos));
+                        	})
+                        	$('#img-container').append(rects.join(''));
+                        })
+                    }
+                })
+                function tmpToString(tmp, data){
+                	var valStr = '';
+                	for(key in data){
+                		if(data.hasOwnProperty(key)){
+                			valStr = data[key];
+                			try{
+                				if(Object.prototype.toString.call(data[key]) == '[object Object]' || 
+                				Object.prototype.toString.call(data[key]) == '[object Array]') {
+                					valStr = JSON.stringify(data[key]);
+                				}
+                			} catch(e){}
+                			tmp = tmp.replace(new RegExp('{{'+key+'}}', 'g'), valStr)
+                		}
+                	}
+                	return tmp;
+                }
+            })
+        </script>
+    </body>  
+</html>

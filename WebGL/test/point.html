@@ -16,19 +16,107 @@
             gl = webGLUtil.getWebGLContext(canvas);
             if(gl){
                 var vshader_source = '' +
-                    'void main(){\n\
-                        gl_Position = vec4(0,0,0,1);\n\
-                        gl_PointSize = 10.0;\n\
-                    }\n';
+                    'attribute vec4 a_position;\n' +
+                    'void main(){\n' +
+                    '    gl_Position = a_position;\n' +
+                    '    gl_PointSize = 10.0;\n' +
+                    '}\n';
                 var fshader_source = '' +
-                    'void main(){\n\
-                        gl_FragColor = vec4(1,0,0,1)\n\
-                    }\n';
+                    'precision mediump float;\n' +
+                    'uniform vec4 u_fragColor;\n\
+                     void main(){\n\
+                         gl_FragColor = u_fragColor;\n\
+                     }\n';
+
+                if(!initShaders(gl, vshader_source, fshader_source)){
+                    console.log('Failed to init shader');
+                    return;
+                }
 
                 gl.clearColor(0, 0, 0, 1);
                 gl.clear(gl.COLOR_BUFFER_BIT);
+                
+                var a_position = gl.getAttribLocation(gl.program, 'a_position');
+                var u_fragColor = gl.getUniformLocation(gl.program, 'u_fragColor');
+
+                if(a_position < 0) {
+                    console.log('Failed to get the storage location of a_position');
+                    return;
+                }
+                var points = [];
+                var colors = [];
+                canvas.addEventListener('mousedown', function(e){
+                    var x = (e.offsetX - canvas.width/2)/(canvas.width/2);
+                    var y = (canvas.height/2 - e.offsetY)/(canvas.height/2);
+                    points.push([x, y]);
+
+                    // var randomNum = Math.random();
+                    colors.push([Math.random(), Math.random(), Math.random(), 1.0]);
+
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+
+                    points.forEach(function(val, i){
+                        gl.vertexAttrib3f(a_position, val[0], val[1], 0.0);
+                        gl.uniform4fv(u_fragColor, new Float32Array(colors[i]));
+                        gl.drawArrays(gl.POINTS, 0, 1);
+                    });
+                });
+                
             }
         })();
+
+        function initShaders(gl, vshader, fshader){
+            var program = createProgram(gl, vshader, fshader);
+            if(!program){
+                console.log('fail to create program');
+                return false;
+            }
+            gl.useProgram(program);
+            gl.program = program;
+            return true;
+        }
+        function createProgram(gl, vshader, fshader){
+            var vertexShader = loadShader(gl, gl.VERTEX_SHADER, vshader);
+            var fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fshader);
+
+            if(!vertexShader || !fragmentShader){
+                return null;
+            }
+            var program = gl.createProgram();
+            if(!program) {
+                return null;
+            }
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+
+            gl.linkProgram(program);
+            if(!gl.getProgramParameter(program, gl.LINK_STATUS)){
+                var err = gl.getProgramInfoLog(program);
+                console.log('fail to link program: ' + err);
+                gl.deleteProgram(program);
+                gl.deleteShader(vertexShader);
+                gl.deleteShader(fragmentShader);
+                return null;
+            }
+            return program;
+        }
+        function loadShader(gl, type, source){
+            var shader = gl.createShader(type);
+            if(!shader){
+                console.log('fail to create shader');
+                return null;
+            }
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+            if(!compiled) {
+                var err = gl.getShaderInfoLog(shader);
+                console.log('fail to compile shader: ' + err);
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
     </script>
 </body>
 </html>
